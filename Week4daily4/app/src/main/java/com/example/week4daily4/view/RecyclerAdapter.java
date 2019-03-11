@@ -1,5 +1,7 @@
-package com.example.week4daily4.View;
+package com.example.week4daily4.view;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.week4daily4.R;
 import com.example.week4daily4.model.photo.Photo;
+import com.example.week4daily4.utils.GlideHelper;
 
 import java.util.List;
 
@@ -32,21 +35,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Photo photo = photos.get(i);
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+        final Photo photo = photos.get(i);
         viewHolder.title.setText(photo.getTitle());
-        String url = formatPhotoUrl(photo);
+        String url = GlideHelper.formatPhotoUrl(photo);
         Glide.with(viewHolder.itemView.getContext()).load(url).centerCrop().into(viewHolder.photo);
-    }
 
-    private String formatPhotoUrl(Photo photo) {
-        String farm = String.valueOf(photo.getFarm());
-        String server = photo.getServer();
-        String id = photo.getId();
-        String secret = photo.getSecret();
-        String url = String.format(BUILD_PHOTO, farm, server, id, secret);
-        Log.d("Log.d", url);
-        return url;
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("photo", photo);
+                Intent intent = new Intent(v.getContext(), DetailsActivity.class);
+                intent.putExtras(bundle);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -60,7 +64,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            photo = itemView.findViewById(R.id.photo);
+            photo = itemView.findViewById(R.id.photoServer);
             title = itemView.findViewById(R.id.title);
         }
     }

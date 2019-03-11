@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Week 4 daily 4</string>
+    <string name="id_s">ID: %s</string>
+    <string name="server_s">Server: %s</string>
+    <string name="title_s">Title: %s</string>
 </resources>
